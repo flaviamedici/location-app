@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Nearby Users</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Nearby Users (Within 5 Miles)</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="card">
+        <ul id="usersList"></ul>
+        <p id="emptyMessage" class="empty"></p>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", loadNearby);
+
+async function loadNearby() {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("user_id");
+
+    if (!token) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    const response = await fetch(`http://localhost:8000/nearby?user_id=${userId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    const users = await response.json();
+    const list = document.getElementById("usersList");
+
+    if (users.length === 0) {
+        document.getElementById("emptyMessage").innerText =
+            "No users found within 5 miles.";
+        return;
+    }
+
+    users.forEach(user => {
+        const li = document.createElement("li");
+        li.className = "user-item";
+        li.innerText = user.username;
+        list.appendChild(li);
+    });
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user_id");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
