@@ -1,143 +1,130 @@
-const API = "http://127.0.0.1:8000"
+let users = []
+let map
 
-async function login(){
+window.onload = function(){
 
-const email = document.getElementById("email").value
+const user = JSON.parse(localStorage.getItem("currentUser"))
 
-const res = await fetch(`${API}/login?email=${email}`,{
-method:"POST"
-})
+document.getElementById("userName").innerText =
+user.first_name + " " + user.last_name
 
-const data = await res.json()
 
-localStorage.setItem("user_id",data.user_id)
+fetch("/users")
 
-window.location="dashboard.html"
-}
+.then(res => res.json())
 
-async function signup(){
+.then(data => {
 
-navigator.geolocation.getCurrentPosition(async(pos)=>{
+users = data
 
-const lat = pos.coords.latitude
-const lon = pos.coords.longitude
+loadUsers()
 
-const interests =
-document.getElementById("interests")
-.value.split(",")
-
-const user = {
-first_name:document.getElementById("first_name").value,
-last_name:document.getElementById("last_name").value,
-email:document.getElementById("email").value,
-age:parseInt(document.getElementById("age").value),
-gender:document.getElementById("gender").value,
-bio:document.getElementById("bio").value,
-interests:interests,
-latitude:lat,
-longitude:lon
-}
-
-await fetch(`${API}/signup`,{
-method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify(user)
-})
-
-window.location="index.html"
+initMap()
 
 })
 
 }
 
-async function loadDashboard(){
 
-if(!document.getElementById("map")) return
+function initMap(){
 
-navigator.geolocation.getCurrentPosition(async(pos)=>{
+map = L.map('map').setView([47.98, -122.20], 10)
 
-const lat = pos.coords.latitude
-const lon = pos.coords.longitude
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+maxZoom:19
+}).addTo(map)
 
-const res = await fetch(`${API}/nearby-users?lat=${lat}&lon=${lon}`)
+users.forEach(user => {
 
-const users = await res.json()
+L.marker([user.lat, user.lon])
+.addTo(map)
+.bindPopup(user.first_name)
 
-const list = document.getElementById("users")
+})
 
-users.forEach(u=>{
+}
 
-const div=document.createElement("div")
+
+function loadUsers(){
+
+const list = document.getElementById("usersList")
+
+list.innerHTML=""
+
+users.forEach(user=>{
+
+const div = document.createElement("div")
+
 div.className="user-card"
 
-div.innerHTML=`
-<span>${u.name} (${u.age})</span>
-<a class="link" href="profile.html?id=${u.id}">View</a>
+div.innerHTML = `
+<strong>${user.first_name} ${user.last_name}</strong><br>
+${user.city}
 `
+
+div.onclick = ()=> showProfile(user)
 
 list.appendChild(div)
 
 })
 
-const map = L.map('map').setView([lat,lon],13)
+}
 
-L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-).addTo(map)
 
-L.marker([lat,lon]).addTo(map).bindPopup("You")
+function showProfile(user){
 
-users.forEach(u=>{
+document.getElementById("profileName").innerText =
+user.first_name + " " + user.last_name
 
-L.marker([u.latitude,u.longitude])
-.addTo(map)
-.bindPopup(`<b>${u.name}</b>`)
+document.getElementById("profileAge").innerText = user.age
+document.getElementById("profileGender").innerText = user.gender
+document.getElementById("profileCity").innerText = user.city
+document.getElementById("profileInterests").innerText =
+user.interests.join(", ")
 
-})
+document.getElementById("profileModal").style.display="block"
+
+}
+
+function closeModal(){
+document.getElementById("profileModal").style.display="none"
+}
+
+
+function filterUsers(){
+
+const text =
+document.getElementById("filterInput").value.toLowerCase()
+
+const filtered = users.filter(u =>
+u.interests.join(",").toLowerCase().includes(text)
+)
+
+const list = document.getElementById("usersList")
+
+list.innerHTML=""
+
+filtered.forEach(user=>{
+
+const div = document.createElement("div")
+
+div.className="user-card"
+
+div.innerHTML = `
+<strong>${user.first_name} ${user.last_name}</strong><br>
+${user.city}
+`
+
+div.onclick = ()=> showProfile(user)
+
+list.appendChild(div)
 
 })
 
 }
 
-async function loadProfile(){
-
-const params=new URLSearchParams(window.location.search)
-const id=params.get("id")
-
-if(!id) return
-
-const res=await fetch(`${API}/profile/${id}`)
-
-const u=await res.json()
-
-document.getElementById("name").innerText=
-u.first_name+" "+u.last_name
-
-document.getElementById("bio").innerText=u.bio
-document.getElementById("age").innerText=u.age
-document.getElementById("gender").innerText=u.gender
-
-const interestDiv=document.getElementById("interests")
-
-u.interests.forEach(i=>{
-
-const span=document.createElement("span")
-span.className="tag"
-span.innerText=i
-
-interestDiv.appendChild(span)
-
-})
-
-}
 
 function logout(){
-
 localStorage.clear()
-
-window.location="index.html"
-
+window.location.href="index.html"
 }
-
-loadDashboard()
-loadProfile()

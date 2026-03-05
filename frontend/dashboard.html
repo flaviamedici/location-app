@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <title>Dashboard</title>
 
 <link rel="stylesheet" href="styles.css">
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 </head>
 
@@ -17,33 +20,59 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <header>
 
-<div class="logo">NearbyConnect</div>
+<h2>Nearby Connect</h2>
 
+<div class="user-info">
+<span id="userName"></span>
 <button onclick="logout()">Logout</button>
+</div>
 
 </header>
 
-<div class="container">
+<div class="dashboard">
 
-<div class="card">
+<div class="map-container">
 
-<h2>People Nearby</h2>
-
-<div id="users"></div>
-
-</div>
-
-<div class="card">
-
-<h2>Map View</h2>
+<h3>Users Near You</h3>
 
 <div id="map"></div>
 
 </div>
 
+
+<div class="users-container">
+
+<h3>People Nearby</h3>
+
+<input type="text" id="filterInput" placeholder="Filter by interest..." onkeyup="filterUsers()">
+
+<div id="usersList"></div>
+
 </div>
 
-<script src="app.js"></script>
+</div>
+
+
+<div id="profileModal" class="modal">
+<div class="modal-content">
+
+<span class="close" onclick="closeModal()">&times;</span>
+
+<h2 id="profileName"></h2>
+
+<p><strong>Age:</strong> <span id="profileAge"></span></p>
+
+<p><strong>Gender:</strong> <span id="profileGender"></span></p>
+
+<p><strong>City:</strong> <span id="profileCity"></span></p>
+
+<p><strong>Interests:</strong> <span id="profileInterests"></span></p>
+
+</div>
+</div>
+
+<script src="script.js"></script>
 
 </body>
+
 </html>
