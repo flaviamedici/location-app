@@ -1,65 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard - Nearby Users</title>
-    <link rel="stylesheet" href="styles.css">
+
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 </head>
+
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>Nearby Users (Within 5 Miles)</h1>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
+<header>
 
-    <div class="card">
-        <ul id="usersList"></ul>
-        <p id="emptyMessage" class="empty"></p>
-    </div>
+<div class="logo">NearbyConnect</div>
+
+<button onclick="logout()">Logout</button>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>People Nearby</h2>
+
+<div id="users"></div>
+
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", loadNearby);
+<div class="card">
 
-async function loadNearby() {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("user_id");
+<h2>Map View</h2>
 
-    if (!token) {
-        window.location.href = "index.html";
-        return;
-    }
+<div id="map"></div>
 
-    const response = await fetch(`http://localhost:8000/nearby?user_id=${userId}`, {
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    });
+</div>
 
-    const users = await response.json();
-    const list = document.getElementById("usersList");
+</div>
 
-    if (users.length === 0) {
-        document.getElementById("emptyMessage").innerText =
-            "No users found within 5 miles.";
-        return;
-    }
-
-    users.forEach(user => {
-        const li = document.createElement("li");
-        li.className = "user-item";
-        li.innerText = user.username;
-        list.appendChild(li);
-    });
-}
-
-function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_id");
-    window.location.href = "index.html";
-}
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>

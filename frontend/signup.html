@@ -1,15 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="style.css">
+<title>Signup</title>
+<link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <h2>Sign Up</h2>
-  <input id="username" placeholder="Username">
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="signup()">Sign Up</button>
 
-  <script src="app.js"></script>
+<body>
+
+<header>
+<div class="logo">NearbyConnect</div>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Create Account</h2>
+
+<input id="first_name" placeholder="First Name">
+<input id="last_name" placeholder="Last Name">
+<input id="email" placeholder="Email">
+<input id="age" placeholder="Age">
+
+<select id="gender">
+<option>Male</option>
+<option>Female</option>
+</select>
+
+<input id="bio" placeholder="Short Bio">
+<input id="interests" placeholder="Interests (comma separated)">
+
+<button onclick="signup()">Create Account</button>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
 </body>
 </html>
