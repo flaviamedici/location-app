@@ -21,15 +21,22 @@ app.add_middleware(
 # Load users
 # -------------------------
 def load_users():
+
+    if not os.path.exists(DATA_FILE):
+        return []
+
     with open(DATA_FILE, "r") as file:
         return json.load(file)
+
 
 # -------------------------
 # Save users
 # -------------------------
 def save_users(users):
+
     with open(DATA_FILE, "w") as file:
         json.dump(users, file, indent=4)
+
 
 # -------------------------
 # Distance calculation
@@ -52,6 +59,7 @@ def distance_miles(lat1, lon1, lat2, lon2):
 
     return R * c
 
+
 # -------------------------
 # Root endpoint
 # -------------------------
@@ -59,12 +67,14 @@ def distance_miles(lat1, lon1, lat2, lon2):
 def home():
     return {"message": "Location App API running"}
 
+
 # -------------------------
 # Get all users
 # -------------------------
 @app.get("/users")
 def get_users():
     return load_users()
+
 
 # -------------------------
 # Get user profile
@@ -80,8 +90,9 @@ def get_profile(user_id: int):
 
     return {"error": "User not found"}
 
+
 # -------------------------
-# Nearby users (5 miles)
+# Nearby users (GET version)
 # -------------------------
 @app.get("/nearby-users")
 def nearby_users(lat: float, lon: float, interest: str | None = None):
@@ -91,12 +102,10 @@ def nearby_users(lat: float, lon: float, interest: str | None = None):
 
     for user in users:
 
-        dist = distance_miles(
-            lat,
-            lon,
-            user["latitude"],
-            user["longitude"]
-        )
+        user_lat = user.get("latitude") or user.get("lat")
+        user_lon = user.get("longitude") or user.get("lon")
+
+        dist = distance_miles(lat, lon, user_lat, user_lon)
 
         if dist <= 5:
 
@@ -106,16 +115,61 @@ def nearby_users(lat: float, lon: float, interest: str | None = None):
 
             nearby.append({
                 "id": user["id"],
-                "name": f"{user['first_name']} {user['last_name']}",
+                "first_name": user["first_name"],
+                "last_name": user["last_name"],
                 "age": user["age"],
                 "gender": user["gender"],
-                "bio": user["bio"],
+                "bio": user.get("bio", ""),
                 "interests": user["interests"],
-                "latitude": user["latitude"],
-                "longitude": user["longitude"]
+                "city": user.get("city", ""),
+                "lat": user_lat,
+                "lon": user_lon,
+                "photo": user.get("photo", ""),
+                "distance": round(dist, 2)
             })
 
     return nearby
+
+
+# -------------------------
+# Nearby users (POST version)
+# Used by new JS code
+# -------------------------
+@app.post("/users-nearby")
+def users_nearby(location: dict):
+
+    lat = location.get("lat")
+    lon = location.get("lon")
+
+    users = load_users()
+    nearby = []
+
+    for user in users:
+
+        user_lat = user.get("latitude") or user.get("lat")
+        user_lon = user.get("longitude") or user.get("lon")
+
+        dist = distance_miles(lat, lon, user_lat, user_lon)
+
+        if dist <= 5:
+
+            nearby.append({
+                "id": user["id"],
+                "first_name": user["first_name"],
+                "last_name": user["last_name"],
+                "age": user["age"],
+                "gender": user["gender"],
+                "bio": user.get("bio", ""),
+                "interests": user["interests"],
+                "city": user.get("city", ""),
+                "lat": user_lat,
+                "lon": user_lon,
+                "photo": user.get("photo", ""),
+                "distance": round(dist, 2)
+            })
+
+    return nearby
+
 
 # -------------------------
 # Signup endpoint
@@ -125,7 +179,10 @@ def signup(user: dict):
 
     users = load_users()
 
-    new_id = max(u["id"] for u in users) + 1
+    if users:
+        new_id = max(u["id"] for u in users) + 1
+    else:
+        new_id = 1
 
     user["id"] = new_id
 
@@ -134,6 +191,7 @@ def signup(user: dict):
     save_users(users)
 
     return {"message": "User created", "user_id": new_id}
+
 
 # -------------------------
 # Simple login

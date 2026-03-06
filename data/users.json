@@ -1,4 +1,26 @@
 [
+    {
+"first_name":"James",
+"last_name":"Miller",
+"age":29,
+"gender":"Male",
+"city":"Seattle",
+"lat":47.6062,
+"lon":-122.3321,
+"interests":["hiking","coffee","tech"],
+"photo":"https://randomuser.me/api/portraits/men/1.jpg"
+},
+{
+"first_name":"Sophia",
+"last_name":"Lopez",
+"age":26,
+"gender":"Female",
+"city":"Seattle",
+"lat":47.6097,
+"lon":-122.3331,
+"interests":["art","yoga","travel"],
+"photo":"https://randomuser.me/api/portraits/women/2.jpg"
+}
 {
 "id":1,
 "first_name":"Emma",

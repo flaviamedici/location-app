@@ -1,5 +1,7 @@
 let users = []
 let map
+let currentLat
+let currentLon
 
 window.onload = function(){
 
@@ -9,7 +11,28 @@ document.getElementById("userName").innerText =
 user.first_name + " " + user.last_name
 
 
-fetch("/users")
+// Get real GPS location
+navigator.geolocation.getCurrentPosition(position => {
+
+currentLat = position.coords.latitude
+currentLon = position.coords.longitude
+
+
+// Send location to backend
+fetch("http://127.0.0.1:5000/users-nearby", {
+
+method: "POST",
+
+headers: {
+"Content-Type": "application/json"
+},
+
+body: JSON.stringify({
+lat: currentLat,
+lon: currentLon
+})
+
+})
 
 .then(res => res.json())
 
@@ -23,22 +46,32 @@ initMap()
 
 })
 
+})
+
 }
 
 
 function initMap(){
 
-map = L.map('map').setView([47.98, -122.20], 10)
+map = L.map('map').setView([currentLat, currentLon], 12)
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
 maxZoom:19
 }).addTo(map)
 
+
+// Marker for current user
+L.marker([currentLat, currentLon])
+.addTo(map)
+.bindPopup("You are here")
+
+
+// Markers for nearby users
 users.forEach(user => {
 
 L.marker([user.lat, user.lon])
 .addTo(map)
-.bindPopup(user.first_name)
+.bindPopup(user.first_name + " (" + user.distance + " miles)")
 
 })
 
@@ -58,8 +91,15 @@ const div = document.createElement("div")
 div.className="user-card"
 
 div.innerHTML = `
-<strong>${user.first_name} ${user.last_name}</strong><br>
-${user.city}
+
+<img src="${user.photo}" class="avatar">
+
+<div class="user-info">
+<strong>${user.first_name} ${user.last_name}</strong>
+<p>${user.age} • ${user.distance} miles away</p>
+<p>${user.city}</p>
+</div>
+
 `
 
 div.onclick = ()=> showProfile(user)
@@ -86,6 +126,7 @@ document.getElementById("profileModal").style.display="block"
 
 }
 
+
 function closeModal(){
 document.getElementById("profileModal").style.display="none"
 }
@@ -111,8 +152,15 @@ const div = document.createElement("div")
 div.className="user-card"
 
 div.innerHTML = `
-<strong>${user.first_name} ${user.last_name}</strong><br>
-${user.city}
+
+<img src="${user.photo}" class="avatar">
+
+<div class="user-info">
+<strong>${user.first_name} ${user.last_name}</strong>
+<p>${user.age} • ${user.distance} miles away</p>
+<p>${user.city}</p>
+</div>
+
 `
 
 div.onclick = ()=> showProfile(user)
