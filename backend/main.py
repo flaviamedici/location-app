@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import json
 import math
 import os
+from fastapi import WebSocket
+from typing import List
 
 app = FastAPI()
 
@@ -206,3 +208,21 @@ def login(email: str):
             return {"user_id": user["id"]}
 
     return {"error": "User not found"}
+
+connections: List[WebSocket] = []
+
+@app.websocket("/ws/chat")
+async def websocket_chat(websocket: WebSocket):
+
+    await websocket.accept()
+    connections.append(websocket)
+
+    try:
+        while True:
+            message = await websocket.receive_text()
+
+            for connection in connections:
+                await connection.send_text(message)
+
+    except:
+        connections.remove(websocket)

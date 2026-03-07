@@ -2,6 +2,7 @@ let users = []
 let map
 let currentLat
 let currentLon
+let socket
 
 window.onload = function(){
 
@@ -9,6 +10,9 @@ const user = JSON.parse(localStorage.getItem("currentUser"))
 
 document.getElementById("userName").innerText =
 user.first_name + " " + user.last_name
+
+// Start chat connection
+initChat()
 
 
 // Get real GPS location
@@ -19,7 +23,7 @@ currentLon = position.coords.longitude
 
 
 // Send location to backend
-fetch("http://127.0.0.1:5000/users-nearby", {
+fetch("http://127.0.0.1:8000/users-nearby", {
 
 method: "POST",
 
@@ -51,6 +55,56 @@ initMap()
 }
 
 
+/////////////////////////
+// CHAT SYSTEM
+/////////////////////////
+
+function initChat(){
+
+socket = new WebSocket("ws://127.0.0.1:8000/ws/chat")
+
+socket.onmessage = function(event){
+
+const msgBox = document.getElementById("messages")
+
+if(!msgBox) return
+
+const div = document.createElement("div")
+
+div.className="chat-message"
+
+div.innerText = event.data
+
+msgBox.appendChild(div)
+
+msgBox.scrollTop = msgBox.scrollHeight
+
+}
+
+}
+
+
+function sendMessage(){
+
+const input = document.getElementById("messageInput")
+
+if(!input || input.value.trim()==="") return
+
+const user = JSON.parse(localStorage.getItem("currentUser"))
+
+const message = user.first_name + ": " + input.value
+
+socket.send(message)
+
+input.value=""
+
+}
+
+
+/////////////////////////
+// MAP
+/////////////////////////
+
 function initMap(){
 
 map = L.map('map').setView([currentLat, currentLon], 12)
@@ -77,6 +131,10 @@ L.marker([user.lat, user.lon])
 
 }
 
+
+/////////////////////////
+// USER LIST
+/////////////////////////
 
 function loadUsers(){
 
@@ -111,6 +169,10 @@ list.appendChild(div)
 }
 
 
+/////////////////////////
+// PROFILE VIEW
+/////////////////////////
+
 function showProfile(user){
 
 document.getElementById("profileName").innerText =
@@ -131,6 +193,10 @@ function closeModal(){
 document.getElementById("profileModal").style.display="none"
 }
 
+
+/////////////////////////
+// FILTER USERS
+/////////////////////////
 
 function filterUsers(){
 
@@ -172,7 +238,14 @@ list.appendChild(div)
 }
 
 
+/////////////////////////
+// LOGOUT
+/////////////////////////
+
 function logout(){
+
 localStorage.clear()
+
 window.location.href="index.html"
+
 }
