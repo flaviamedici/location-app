@@ -137,6 +137,25 @@ input.value=""
 
 }
 
+function toggleChat() {
+    console.log("toggleChat called")
+    const chatContent = document.getElementById("chatContent")
+    const toggleBtn = document.getElementById("chatToggleBtn")
+    
+    console.log("chatContent:", chatContent)
+    console.log("toggleBtn:", toggleBtn)
+    
+    if (chatContent.classList.contains("minimized")) {
+        chatContent.classList.remove("minimized")
+        toggleBtn.textContent = "−"
+        console.log("expanded")
+    } else {
+        chatContent.classList.add("minimized")
+        toggleBtn.textContent = "+"
+        console.log("minimized")
+    }
+}
+
 
 /////////////////////////
 // MAP
