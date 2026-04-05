@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import json
 import math
 import os
@@ -63,11 +64,6 @@ def distance_miles(lat1, lon1, lat2, lon2):
 
 
 # -------------------------
-# Root endpoint
-# -------------------------
-@app.get("/")
-def home():
-    return {"message": "Location App API running"}
 
 
 # -------------------------
@@ -226,3 +222,7 @@ async def websocket_chat(websocket: WebSocket):
 
     except:
         connections.remove(websocket)
+
+
+# Serve static frontend files
+app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")

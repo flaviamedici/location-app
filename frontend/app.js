@@ -23,7 +23,7 @@ currentLon = position.coords.longitude
 
 
 // Send location to backend
-fetch("http://127.0.0.1:8000/users-nearby", {
+fetch("/users-nearby", {
 
 method: "POST",
 
@@ -61,7 +61,7 @@ initMap()
 
 function initChat(){
 
-socket = new WebSocket("ws://127.0.0.1:8000/ws/chat")
+socket = new WebSocket("ws://" + window.location.host + "/ws/chat")
 
 socket.onmessage = function(event){
 
