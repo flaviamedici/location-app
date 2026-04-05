@@ -26,9 +26,19 @@ fetchNearbyUsers()
 }, error => {
     console.log("Geolocation failed:", error)
     document.getElementById("locationInput").style.display = "block"
-    document.getElementById("manualLat").value = 47.6062
-    document.getElementById("manualLon").value = -122.3321
+    document.getElementById("manualCity").value = "Seattle, WA"
 })
+
+const cityCoordinates = {
+    "seattle": { lat: 47.6062, lon: -122.3321 },
+    "bellevue": { lat: 47.6101, lon: -122.2015 },
+    "redmond": { lat: 47.673988, lon: -122.121513 },
+    "kirkland": { lat: 47.6769, lon: -122.2060 },
+    "bothell": { lat: 47.7617, lon: -122.2054 },
+    "woodinville": { lat: 47.7545, lon: -122.1734 },
+    "everett": { lat: 47.978984, lon: -122.202079 },
+    "marysville": { lat: 48.0513, lon: -122.1770 }
+}
 
 function fetchNearbyUsers() {
     // Send location to backend
@@ -64,16 +74,18 @@ function fetchNearbyUsers() {
 }
 
 function searchManualLocation() {
-    const lat = parseFloat(document.getElementById("manualLat").value)
-    const lon = parseFloat(document.getElementById("manualLon").value)
+    const cityInput = document.getElementById("manualCity").value.trim().toLowerCase()
+    const cityKey = cityInput.split(",")[0].trim()
 
-    if (isNaN(lat) || isNaN(lon)) {
-        alert("Please enter valid latitude and longitude")
+    if (!cityKey || !cityCoordinates[cityKey]) {
+        alert(
+            "Please enter a supported city and state, for example: Seattle, WA or Bellevue, WA."
+        )
         return
     }
 
-    currentLat = lat
-    currentLon = lon
+    currentLat = cityCoordinates[cityKey].lat
+    currentLon = cityCoordinates[cityKey].lon
 
     fetchNearbyUsers()
 }

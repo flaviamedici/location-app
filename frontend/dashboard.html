@@ -29,11 +29,11 @@
 
         <div id="map"></div>
 
-        <div id="locationInput" style="display:none; margin-top:10px;">
-          <p>Location access denied. Enter your location manually:</p>
-          <input type="number" id="manualLat" placeholder="Latitude" step="0.0001">
-          <input type="number" id="manualLon" placeholder="Longitude" step="0.0001">
+        <div id="locationInput" style="display: none; margin-top: 10px">
+          <p>Location access denied. Enter your city and state:</p>
+          <input type="text" id="manualCity" placeholder="City, State" />
           <button onclick="searchManualLocation()">Find People</button>
+          <p class="hint">Examples: Seattle, WA | Bellevue, WA | Redmond, WA</p>
         </div>
       </div>
 
