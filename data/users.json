@@ -1,376 +1,242 @@
 [
     {
-"id":1,
-"first_name":"James",
-"last_name":"Miller",
-"age":29,
-"gender":"Male",
-"city":"Seattle",
-"lat":47.6062,
-"lon":-122.3321,
-"interests":["hiking","coffee","tech"],
-"photo":"https://randomuser.me/api/portraits/men/1.jpg"
-},
-{
-"id":2,
-"first_name":"Sophia",
-"last_name":"Lopez",
-"age":26,
-"gender":"Female",
-"city":"Seattle",
-"lat":47.6097,
-"lon":-122.3331,
-"interests":["art","yoga","travel"],
-"photo":"https://randomuser.me/api/portraits/women/2.jpg"
-}
-{
-"id":1,
-"first_name":"Emma",
-"last_name":"Stone",
-"age":29,
-"gender":"Female",
-"bio":"Love hiking and coffee.",
-"interests":["hiking","coffee","travel"],
-"latitude":47.9789,
-"longitude":-122.2021
-},
-{
-"id":2,
-"first_name":"Sophia",
-"last_name":"Martinez",
-"age":27,
-"gender":"Female",
-"bio":"Fitness enthusiast and yoga lover.",
-"interests":["fitness","yoga","running"],
-"latitude":47.9810,
-"longitude":-122.2102
-},
-{
-"id":3,
-"first_name":"Olivia",
-"last_name":"Johnson",
-"age":31,
-"gender":"Female",
-"bio":"Photographer and traveler.",
-"interests":["photography","travel","art"],
-"latitude":47.9750,
-"longitude":-122.2150
-},
-{
-"id":4,
-"first_name":"Ava",
-"last_name":"Lopez",
-"age":26,
-"gender":"Female",
-"bio":"Food lover and home chef.",
-"interests":["cooking","food","wine"],
-"latitude":47.9835,
-"longitude":-122.1980
-},
-{
-"id":5,
-"first_name":"Isabella",
-"last_name":"Brown",
-"age":30,
-"gender":"Female",
-"bio":"Bookworm and movie fan.",
-"interests":["reading","movies","coffee"],
-"latitude":47.9860,
-"longitude":-122.2050
-},
-{
-"id":6,
-"first_name":"Mia",
-"last_name":"Garcia",
-"age":24,
-"gender":"Female",
-"bio":"Dog mom and nature lover.",
-"interests":["dogs","hiking","nature"],
-"latitude":47.9900,
-"longitude":-122.2105
-},
-{
-"id":7,
-"first_name":"Charlotte",
-"last_name":"Anderson",
-"age":32,
-"gender":"Female",
-"bio":"Artist and creative soul.",
-"interests":["painting","design","travel"],
-"latitude":47.9920,
-"longitude":-122.2070
-},
-{
-"id":8,
-"first_name":"Amelia",
-"last_name":"Clark",
-"age":28,
-"gender":"Female",
-"bio":"Coffee addict and coder.",
-"interests":["coding","coffee","tech"],
-"latitude":47.9795,
-"longitude":-122.2140
-},
-{
-"id":9,
-"first_name":"Harper",
-"last_name":"Lewis",
-"age":25,
-"gender":"Female",
-"bio":"Runner and fitness coach.",
-"interests":["running","fitness","health"],
-"latitude":47.9740,
-"longitude":-122.1990
-},
-{
-"id":10,
-"first_name":"Evelyn",
-"last_name":"Walker",
-"age":33,
-"gender":"Female",
-"bio":"Traveler exploring the world.",
-"interests":["travel","photography","culture"],
-"latitude":47.9875,
-"longitude":-122.2200
-},
-{
-"id":11,
-"first_name":"Liam",
-"last_name":"Smith",
-"age":34,
-"gender":"Male",
-"bio":"Software developer and gamer.",
-"interests":["coding","gaming","movies"],
-"latitude":47.9780,
-"longitude":-122.2060
-},
-{
-"id":12,
-"first_name":"Noah",
-"last_name":"Johnson",
-"age":29,
-"gender":"Male",
-"bio":"Gym lover and sports fan.",
-"interests":["fitness","basketball","gym"],
-"latitude":47.9850,
-"longitude":-122.2090
-},
-{
-"id":13,
-"first_name":"Oliver",
-"last_name":"Martinez",
-"age":31,
-"gender":"Male",
-"bio":"Photographer exploring nature.",
-"interests":["photography","hiking","travel"],
-"latitude":47.9775,
-"longitude":-122.2005
-},
-{
-"id":14,
-"first_name":"Elijah",
-"last_name":"Brown",
-"age":26,
-"gender":"Male",
-"bio":"Music producer.",
-"interests":["music","dj","concerts"],
-"latitude":47.9822,
-"longitude":-122.2160
-},
-{
-"id":15,
-"first_name":"James",
-"last_name":"Garcia",
-"age":35,
-"gender":"Male",
-"bio":"Entrepreneur and coffee fan.",
-"interests":["business","coffee","networking"],
-"latitude":47.9902,
-"longitude":-122.1988
-},
-{
-"id":16,
-"first_name":"William",
-"last_name":"Miller",
-"age":28,
-"gender":"Male",
-"bio":"Cycling and outdoors.",
-"interests":["cycling","fitness","nature"],
-"latitude":47.9725,
-"longitude":-122.2085
-},
-{
-"id":17,
-"first_name":"Benjamin",
-"last_name":"Davis",
-"age":33,
-"gender":"Male",
-"bio":"Movie nerd.",
-"interests":["movies","cinema","popcorn"],
-"latitude":47.9888,
-"longitude":-122.2030
-},
-{
-"id":18,
-"first_name":"Lucas",
-"last_name":"Rodriguez",
-"age":27,
-"gender":"Male",
-"bio":"Tech enthusiast.",
-"interests":["tech","gadgets","coding"],
-"latitude":47.9798,
-"longitude":-122.2115
-},
-{
-"id":19,
-"first_name":"Henry",
-"last_name":"Wilson",
-"age":30,
-"gender":"Male",
-"bio":"Traveler and foodie.",
-"interests":["food","travel","culture"],
-"latitude":47.9844,
-"longitude":-122.2133
-},
-{
-"id":20,
-"first_name":"Alexander",
-"last_name":"Moore",
-"age":36,
-"gender":"Male",
-"bio":"Adventure seeker.",
-"interests":["hiking","climbing","camping"],
-"latitude":47.9762,
-"longitude":-122.2040
-},
-{
-"id":21,
-"first_name":"Emily",
-"last_name":"Taylor",
-"age":25,
-"gender":"Female",
-"bio":"Yoga instructor and wellness coach.",
-"interests":["yoga","meditation","health"],
-"latitude":47.6100,
-"longitude":-122.3300,
-"city":"Seattle",
-"photo":"https://randomuser.me/api/portraits/women/3.jpg"
-},
-{
-"id":22,
-"first_name":"Daniel",
-"last_name":"White",
-"age":32,
-"gender":"Male",
-"bio":"Chef and food blogger.",
-"interests":["cooking","food","blogging"],
-"latitude":47.6200,
-"longitude":-122.3500,
-"city":"Bellevue",
-"photo":"https://randomuser.me/api/portraits/men/4.jpg"
-},
-{
-"id":23,
-"first_name":"Madison",
-"last_name":"Harris",
-"age":28,
-"gender":"Female",
-"bio":"Graphic designer and artist.",
-"interests":["design","art","creativity"],
-"latitude":47.6300,
-"longitude":-122.1400,
-"city":"Redmond",
-"photo":"https://randomuser.me/api/portraits/women/5.jpg"
-},
-{
-"id":24,
-"first_name":"Jackson",
-"last_name":"Thompson",
-"age":29,
-"gender":"Male",
-"bio":"Software engineer and cyclist.",
-"interests":["coding","cycling","tech"],
-"latitude":47.6500,
-"longitude":-122.1200,
-"city":"Kirkland",
-"photo":"https://randomuser.me/api/portraits/men/6.jpg"
-},
-{
-"id":25,
-"first_name":"Avery",
-"last_name":"Martin",
-"age":26,
-"gender":"Female",
-"bio":"Environmental scientist.",
-"interests":["environment","science","hiking"],
-"latitude":47.6700,
-"longitude":-122.1000,
-"city":"Bothell",
-"photo":"https://randomuser.me/api/portraits/women/7.jpg"
-},
-{
-"id":26,
-"first_name":"Sebastian",
-"last_name":"Garcia",
-"age":31,
-"gender":"Male",
-"bio":"Musician and songwriter.",
-"interests":["music","guitar","songwriting"],
-"latitude":47.6900,
-"longitude":-122.0800,
-"city":"Woodinville",
-"photo":"https://randomuser.me/api/portraits/men/8.jpg"
-},
-{
-"id":27,
-"first_name":"Scarlett",
-"last_name":"Robinson",
-"age":27,
-"gender":"Female",
-"bio":"Marketing specialist and traveler.",
-"interests":["marketing","travel","photography"],
-"latitude":47.7100,
-"longitude":-122.0600,
-"city":"Duvall",
-"photo":"https://randomuser.me/api/portraits/women/9.jpg"
-},
-{
-"id":28,
-"first_name":"Matthew",
-"last_name":"Clark",
-"age":34,
-"gender":"Male",
-"bio":"Architect and urban planner.",
-"interests":["architecture","urban planning","design"],
-"latitude":47.7300,
-"longitude":-122.0400,
-"city":"Snohomish",
-"photo":"https://randomuser.me/api/portraits/men/10.jpg"
-},
-{
-"id":29,
-"first_name":"Victoria",
-"last_name":"Rodriguez",
-"age":30,
-"gender":"Female",
-"bio":"Teacher and book lover.",
-"interests":["teaching","books","education"],
-"latitude":47.7500,
-"longitude":-122.0200,
-"city":"Everett",
-"photo":"https://randomuser.me/api/portraits/women/11.jpg"
-},
-{
-"id":30,
-"first_name":"David",
-"last_name":"Lewis",
-"age":33,
-"gender":"Male",
-"bio":"Entrepreneur and startup founder.",
-"interests":["business","startups","innovation"],
-"latitude":47.7700,
-"longitude":-122.0000,
-"city":"Marysville",
-"photo":"https://randomuser.me/api/portraits/men/12.jpg"
-}
+        "id": 1,
+        "first_name": "James",
+        "last_name": "Miller",
+        "age": 29,
+        "gender": "Male",
+        "city": "Seattle",
+        "lat": 47.6062,
+        "lon": -122.3321,
+        "interests": [
+            "hiking",
+            "coffee",
+            "tech"
+        ],
+        "photo": "https://randomuser.me/api/portraits/men/1.jpg"
+    },
+    {
+        "id": 2,
+        "first_name": "Sophia",
+        "last_name": "Lopez",
+        "age": 26,
+        "gender": "Female",
+        "city": "Seattle",
+        "lat": 47.6097,
+        "lon": -122.3331,
+        "interests": [
+            "art",
+            "yoga",
+            "travel"
+        ],
+        "photo": "https://randomuser.me/api/portraits/women/2.jpg"
+    },
+    {
+        "id": 3,
+        "first_name": "Emma",
+        "last_name": "Stone",
+        "age": 29,
+        "gender": "Female",
+        "city": "Kenmore",
+        "latitude": 47.755,
+        "longitude": -122.235,
+        "bio": "Love hiking and coffee.",
+        "interests": [
+            "hiking",
+            "coffee",
+            "travel"
+        ]
+    },
+    {
+        "id": 4,
+        "first_name": "Sophia",
+        "last_name": "Martinez",
+        "age": 27,
+        "gender": "Female",
+        "city": "Kirkland",
+        "latitude": 47.6769,
+        "longitude": -122.206,
+        "bio": "Fitness enthusiast and yoga lover.",
+        "interests": [
+            "fitness",
+            "yoga",
+            "running"
+        ]
+    },
+    {
+        "id": 5,
+        "first_name": "Olivia",
+        "last_name": "Johnson",
+        "age": 31,
+        "gender": "Female",
+        "city": "Redmond",
+        "latitude": 47.675,
+        "longitude": -122.1215,
+        "bio": "Photographer and traveler.",
+        "interests": [
+            "photography",
+            "travel",
+            "art"
+        ]
+    },
+    {
+        "id": 6,
+        "first_name": "Ava",
+        "last_name": "Lopez",
+        "age": 26,
+        "gender": "Female",
+        "city": "Bellevue",
+        "latitude": 47.6101,
+        "longitude": -122.2015,
+        "bio": "Food lover and home chef.",
+        "interests": [
+            "cooking",
+            "food",
+            "wine"
+        ]
+    },
+    {
+        "id": 7,
+        "first_name": "Isabella",
+        "last_name": "Brown",
+        "age": 30,
+        "gender": "Female",
+        "city": "Bothell",
+        "latitude": 47.7608,
+        "longitude": -122.2054,
+        "bio": "Bookworm and movie fan.",
+        "interests": [
+            "reading",
+            "movies",
+            "coffee"
+        ]
+    },
+    {
+        "id": 8,
+        "first_name": "Mia",
+        "last_name": "Garcia",
+        "age": 24,
+        "gender": "Female",
+        "city": "Woodinville",
+        "latitude": 47.7545,
+        "longitude": -122.1734,
+        "bio": "Dog mom and nature lover.",
+        "interests": [
+            "dogs",
+            "hiking",
+            "nature"
+        ]
+    },
+    {
+        "id": 9,
+        "first_name": "Charlotte",
+        "last_name": "Anderson",
+        "age": 32,
+        "gender": "Female",
+        "city": "Everett",
+        "latitude": 47.978984,
+        "longitude": -122.202079,
+        "bio": "Artist and creative soul.",
+        "interests": [
+            "painting",
+            "design",
+            "travel"
+        ]
+    },
+    {
+        "id": 10,
+        "first_name": "Amelia",
+        "last_name": "Clark",
+        "age": 28,
+        "gender": "Female",
+        "city": "Marysville",
+        "latitude": 48.0513,
+        "longitude": -122.177,
+        "bio": "Coffee addict and coder.",
+        "interests": [
+            "coding",
+            "coffee",
+            "tech"
+        ]
+    },
+    {
+        "id": 11,
+        "first_name": "Liam",
+        "last_name": "Smith",
+        "age": 34,
+        "gender": "Male",
+        "city": "Seattle",
+        "latitude": 47.6065,
+        "longitude": -122.3318,
+        "bio": "Software developer and gamer.",
+        "interests": [
+            "coding",
+            "gaming",
+            "movies"
+        ]
+    },
+    {
+        "id": 12,
+        "first_name": "Noah",
+        "last_name": "Johnson",
+        "age": 29,
+        "gender": "Male",
+        "city": "Bellevue",
+        "latitude": 47.6149,
+        "longitude": -122.1933,
+        "bio": "Gym lover and sports fan.",
+        "interests": [
+            "fitness",
+            "basketball",
+            "gym"
+        ]
+    },
+    {
+        "id": 13,
+        "first_name": "Oliver",
+        "last_name": "Martinez",
+        "age": 31,
+        "gender": "Male",
+        "city": "Redmond",
+        "latitude": 47.673,
+        "longitude": -122.121,
+        "bio": "Photographer exploring nature.",
+        "interests": [
+            "photography",
+            "hiking",
+            "travel"
+        ]
+    },
+    {
+        "id": 14,
+        "first_name": "Elijah",
+        "last_name": "Brown",
+        "age": 26,
+        "gender": "Male",
+        "city": "Kirkland",
+        "latitude": 47.68,
+        "longitude": -122.205,
+        "bio": "Music producer.",
+        "interests": [
+            "music",
+            "dj",
+            "concerts"
+        ]
+    },
+    {
+        "id": 15,
+        "first_name": "Avery",
+        "last_name": "Martin",
+        "age": 26,
+        "gender": "Female",
+        "city": "Snohomish",
+        "latitude": 47.912,
+        "longitude": -122.118,
+        "bio": "Environmental scientist.",
+        "interests": [
+            "environment",
+            "science",
+            "hiking"
+        ]
+    }
 ]

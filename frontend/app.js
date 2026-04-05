@@ -28,6 +28,7 @@ fetchNearbyUsers()
     document.getElementById("locationInput").style.display = "block"
     document.getElementById("manualCity").value = "Seattle, WA"
 })
+}
 
 const cityCoordinates = {
     "seattle": { lat: 47.6062, lon: -122.3321 },
@@ -88,8 +89,6 @@ function searchManualLocation() {
     currentLon = cityCoordinates[cityKey].lon
 
     fetchNearbyUsers()
-}
-
 }
 
 
