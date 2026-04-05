@@ -105,7 +105,7 @@ def nearby_users(lat: float, lon: float, interest: str | None = None):
 
         dist = distance_miles(lat, lon, user_lat, user_lon)
 
-        if dist <= 5:
+        if dist <= 50:
 
             if interest:
                 if interest.lower() not in [i.lower() for i in user["interests"]]:
@@ -149,7 +149,7 @@ def users_nearby(location: dict):
 
         dist = distance_miles(lat, lon, user_lat, user_lon)
 
-        if dist <= 5:
+        if dist <= 50:
 
             nearby.append({
                 "id": user["id"],

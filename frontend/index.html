@@ -1,54 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Nearby Connect</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-
-<div class="container">
-
-    <div class="card">
+  <body>
+    <div class="container">
+      <div class="card">
         <h1>Nearby Connect</h1>
         <p class="subtitle">Find people around you</p>
 
-        <input type="text" id="first_name" placeholder="First Name">
-        <input type="text" id="last_name" placeholder="Last Name">
-        <input type="number" id="age" placeholder="Age">
+        <input type="text" id="first_name" placeholder="First Name" />
+        <input type="text" id="last_name" placeholder="Last Name" />
+        <input type="number" id="age" placeholder="Age" />
 
         <select id="gender">
-            <option value="">Gender</option>
-            <option>Male</option>
-            <option>Female</option>
+          <option value="">Gender</option>
+          <option>Male</option>
+          <option>Female</option>
         </select>
 
-        <input type="text" id="city" placeholder="City">
+        <input type="text" id="city" placeholder="City" />
 
-        <input type="text" id="interests" placeholder="Interests (comma separated)">
+        <input
+          type="text"
+          id="interests"
+          placeholder="Interests (comma separated)"
+        />
 
         <button onclick="login()">Enter</button>
+      </div>
     </div>
 
-</div>
+    <script>
+      function login() {
+        const user = {
+          first_name: document.getElementById("first_name").value,
+          last_name: document.getElementById("last_name").value,
+          age: document.getElementById("age").value,
+          gender: document.getElementById("gender").value,
+          city: document.getElementById("city").value,
+          interests: document.getElementById("interests").value,
+        };
 
-<script>
-function login(){
+        localStorage.setItem("currentUser", JSON.stringify(user));
 
-    const user = {
-        first_name: document.getElementById("first_name").value,
-        last_name: document.getElementById("last_name").value,
-        age: document.getElementById("age").value,
-        gender: document.getElementById("gender").value,
-        city: document.getElementById("city").value,
-        interests: document.getElementById("interests").value
-    }
-
-    localStorage.setItem("currentUser", JSON.stringify(user))
-
-    window.location.href = "dashboard.html"
-}
-</script>
-
-</body>
+        window.location.href = "dashboard.html";
+      }
+    </script>
+  </body>
 </html>

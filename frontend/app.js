@@ -21,36 +21,62 @@ navigator.geolocation.getCurrentPosition(position => {
 currentLat = position.coords.latitude
 currentLon = position.coords.longitude
 
+fetchNearbyUsers()
 
-// Send location to backend
-fetch("/users-nearby", {
-
-method: "POST",
-
-headers: {
-"Content-Type": "application/json"
-},
-
-body: JSON.stringify({
-lat: currentLat,
-lon: currentLon
+}, error => {
+    console.log("Geolocation failed:", error)
+    document.getElementById("locationInput").style.display = "block"
+    document.getElementById("manualLat").value = 47.6062
+    document.getElementById("manualLon").value = -122.3321
 })
 
-})
+function fetchNearbyUsers() {
+    // Send location to backend
+    fetch("/users-nearby", {
 
-.then(res => res.json())
+    method: "POST",
 
-.then(data => {
+    headers: {
+    "Content-Type": "application/json"
+    },
 
-users = data
+    body: JSON.stringify({
+    lat: currentLat,
+    lon: currentLon
+    })
 
-loadUsers()
+    })
 
-initMap()
+    .then(res => res.json())
 
-})
+    .then(data => {
 
-})
+    users = data
+
+    loadUsers()
+
+    initMap()
+
+    })
+    .catch(err => {
+        console.error("Error fetching users:", err)
+    })
+}
+
+function searchManualLocation() {
+    const lat = parseFloat(document.getElementById("manualLat").value)
+    const lon = parseFloat(document.getElementById("manualLon").value)
+
+    if (isNaN(lat) || isNaN(lon)) {
+        alert("Please enter valid latitude and longitude")
+        return
+    }
+
+    currentLat = lat
+    currentLon = lon
+
+    fetchNearbyUsers()
+}
 
 }
 

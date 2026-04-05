@@ -1,89 +1,81 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <title>Dashboard</title>
 
-<head>
+    <link rel="stylesheet" href="style.css" />
 
-<title>Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
 
-<link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  </head>
 
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+  <body>
+    <header>
+      <h2>Nearby Connect</h2>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      <div class="user-info">
+        <span id="userName"></span>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </header>
 
-</head>
+    <div class="dashboard">
+      <div class="map-container">
+        <h3>Users Near You</h3>
 
-<body>
+        <div id="map"></div>
 
-<header>
+        <div id="locationInput" style="display:none; margin-top:10px;">
+          <p>Location access denied. Enter your location manually:</p>
+          <input type="number" id="manualLat" placeholder="Latitude" step="0.0001">
+          <input type="number" id="manualLon" placeholder="Longitude" step="0.0001">
+          <button onclick="searchManualLocation()">Find People</button>
+        </div>
+      </div>
 
-<h2>Nearby Connect</h2>
+      <div class="users-container">
+        <h3>People Nearby</h3>
 
-<div class="user-info">
-<span id="userName"></span>
-<button onclick="logout()">Logout</button>
-</div>
+        <input
+          type="text"
+          id="filterInput"
+          placeholder="Filter by interest..."
+          onkeyup="filterUsers()"
+        />
 
-</header>
+        <div id="usersList"></div>
+      </div>
+    </div>
 
-<div class="dashboard">
+    <div id="profileModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
 
-<div class="map-container">
+        <h2 id="profileName"></h2>
 
-<h3>Users Near You</h3>
+        <p><strong>Age:</strong> <span id="profileAge"></span></p>
 
-<div id="map"></div>
+        <p><strong>Gender:</strong> <span id="profileGender"></span></p>
 
-</div>
+        <p><strong>City:</strong> <span id="profileCity"></span></p>
 
+        <p><strong>Interests:</strong> <span id="profileInterests"></span></p>
+      </div>
+    </div>
+    <div id="chatContainer">
+      <h3>Community Chat</h3>
 
-<div class="users-container">
+      <div id="messages"></div>
 
-<h3>People Nearby</h3>
+      <input id="messageInput" placeholder="Type a message" />
 
-<input type="text" id="filterInput" placeholder="Filter by interest..." onkeyup="filterUsers()">
+      <button onclick="sendMessage()">Send</button>
+    </div>
 
-<div id="usersList"></div>
-
-</div>
-
-</div>
-
-
-<div id="profileModal" class="modal">
-<div class="modal-content">
-
-<span class="close" onclick="closeModal()">&times;</span>
-
-<h2 id="profileName"></h2>
-
-<p><strong>Age:</strong> <span id="profileAge"></span></p>
-
-<p><strong>Gender:</strong> <span id="profileGender"></span></p>
-
-<p><strong>City:</strong> <span id="profileCity"></span></p>
-
-<p><strong>Interests:</strong> <span id="profileInterests"></span></p>
-
-</div>
-</div>
-<div id="chatContainer">
-
-<h3>Community Chat</h3>
-
-<div id="messages"></div>
-
-<input id="messageInput" placeholder="Type a message">
-
-<button onclick="sendMessage()">Send</button>
-
-</div>
-
-<script src="script.js"></script>
-
-</body>
-
+    <script src="app.js"></script>
+  </body>
 </html>

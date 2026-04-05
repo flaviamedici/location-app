@@ -1,42 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<title>Signup</title>
-<link rel="stylesheet" href="styles.css">
-</head>
+  <head>
+    <title>Signup</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
+    <header>
+      <div class="logo">NearbyConnect</div>
+    </header>
 
-<header>
-<div class="logo">NearbyConnect</div>
-</header>
+    <div class="container">
+      <div class="card">
+        <h2>Create Account</h2>
 
-<div class="container">
+        <input id="first_name" placeholder="First Name" />
+        <input id="last_name" placeholder="Last Name" />
+        <input id="email" placeholder="Email" />
+        <input id="age" placeholder="Age" />
 
-<div class="card">
+        <select id="gender">
+          <option>Male</option>
+          <option>Female</option>
+        </select>
 
-<h2>Create Account</h2>
+        <input id="bio" placeholder="Short Bio" />
+        <input id="interests" placeholder="Interests (comma separated)" />
 
-<input id="first_name" placeholder="First Name">
-<input id="last_name" placeholder="Last Name">
-<input id="email" placeholder="Email">
-<input id="age" placeholder="Age">
+        <button onclick="signup()">Create Account</button>
+      </div>
+    </div>
 
-<select id="gender">
-<option>Male</option>
-<option>Female</option>
-</select>
-
-<input id="bio" placeholder="Short Bio">
-<input id="interests" placeholder="Interests (comma separated)">
-
-<button onclick="signup()">Create Account</button>
-
-</div>
-
-</div>
-
-<script src="app.js"></script>
-
-</body>
+    <script src="app.js"></script>
+  </body>
 </html>
