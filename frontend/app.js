@@ -1,18 +1,21 @@
+console.log("app.js loaded")
+
 let users = []
 let map
 let currentLat
 let currentLon
-let socket
 
 window.onload = function(){
 
 const user = JSON.parse(localStorage.getItem("currentUser"))
 
+if (!user) {
+    window.location.href = "index.html"
+    return
+}
+
 document.getElementById("userName").innerText =
 user.first_name + " " + user.last_name
-
-// Start chat connection
-initChat()
 
 
 // Get real GPS location
@@ -89,71 +92,6 @@ function searchManualLocation() {
     currentLon = cityCoordinates[cityKey].lon
 
     fetchNearbyUsers()
-}
-
-
-/////////////////////////
-// CHAT SYSTEM
-/////////////////////////
-
-function initChat(){
-
-socket = new WebSocket("ws://" + window.location.host + "/ws/chat")
-
-socket.onmessage = function(event){
-
-const msgBox = document.getElementById("messages")
-
-if(!msgBox) return
-
-const div = document.createElement("div")
-
-div.className="chat-message"
-
-div.innerText = event.data
-
-msgBox.appendChild(div)
-
-msgBox.scrollTop = msgBox.scrollHeight
-
-}
-
-}
-
-
-function sendMessage(){
-
-const input = document.getElementById("messageInput")
-
-if(!input || input.value.trim()==="") return
-
-const user = JSON.parse(localStorage.getItem("currentUser"))
-
-const message = user.first_name + ": " + input.value
-
-socket.send(message)
-
-input.value=""
-
-}
-
-function toggleChat() {
-    console.log("toggleChat called")
-    const chatContent = document.getElementById("chatContent")
-    const toggleBtn = document.getElementById("chatToggleBtn")
-    
-    console.log("chatContent:", chatContent)
-    console.log("toggleBtn:", toggleBtn)
-    
-    if (chatContent.classList.contains("minimized")) {
-        chatContent.classList.remove("minimized")
-        toggleBtn.textContent = "−"
-        console.log("expanded")
-    } else {
-        chatContent.classList.add("minimized")
-        toggleBtn.textContent = "+"
-        console.log("minimized")
-    }
 }
 
 

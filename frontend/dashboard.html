@@ -11,6 +11,8 @@
     />
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="app.js" defer></script>
   </head>
 
   <body>
@@ -69,23 +71,5 @@
         <p><strong>Interests:</strong> <span id="profileInterests"></span></p>
       </div>
     </div>
-    <div id="chatContainer">
-      <button id="chatToggleBtn" onclick="toggleChat()" class="toggle-btn">
-        +
-      </button>
-      <div class="chat-header">
-        <h3>Community Chat</h3>
-      </div>
-
-      <div id="chatContent" class="chat-content minimized">
-        <div id="messages"></div>
-
-        <input id="messageInput" placeholder="Type a message" />
-
-        <button onclick="sendMessage()">Send</button>
-      </div>
-    </div>
-
-    <script src="app.js"></script>
   </body>
 </html>
