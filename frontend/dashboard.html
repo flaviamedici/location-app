@@ -40,12 +40,15 @@
       <div class="users-container">
         <h3>People Nearby</h3>
 
-        <input
-          type="text"
-          id="filterInput"
-          placeholder="Filter by interest..."
-          onkeyup="filterUsers()"
-        />
+        <div class="filter-row">
+          <input
+            type="text"
+            id="filterInput"
+            placeholder="Filter by interest..."
+            onkeyup="filterUsers()"
+          />
+          <button onclick="filterUsers()">Filter</button>
+        </div>
 
         <div id="usersList"></div>
       </div>
