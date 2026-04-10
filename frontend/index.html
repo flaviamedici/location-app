@@ -30,10 +30,17 @@
         />
 
         <button onclick="login()">Enter</button>
+        <button onclick="demoLogin()">Continue as Demo User</button>
       </div>
     </div>
 
     <script>
+      window.onload = function () {
+        if (localStorage.getItem("currentUser")) {
+          window.location.href = "dashboard.html";
+        }
+      };
+
       function login() {
         const user = {
           first_name: document.getElementById("first_name").value,
@@ -46,6 +53,20 @@
 
         localStorage.setItem("currentUser", JSON.stringify(user));
 
+        window.location.href = "dashboard.html";
+      }
+
+      function demoLogin() {
+        const user = {
+          first_name: "Demo",
+          last_name: "User",
+          age: 28,
+          gender: "Prefer not to say",
+          city: "Seattle",
+          interests: "Travel, Music, Tech",
+        };
+
+        localStorage.setItem("currentUser", JSON.stringify(user));
         window.location.href = "dashboard.html";
       }
     </script>

@@ -5,33 +5,35 @@ let map
 let currentLat
 let currentLon
 
-window.onload = function(){
+window.addEventListener("load", function(){
+    if (!document.getElementById("userName")) {
+        return
+    }
 
-const user = JSON.parse(localStorage.getItem("currentUser"))
+    const user = JSON.parse(localStorage.getItem("currentUser"))
 
-if (!user) {
-    window.location.href = "index.html"
-    return
-}
+    if (!user) {
+        window.location.href = "index.html"
+        return
+    }
 
-document.getElementById("userName").innerText =
-user.first_name + " " + user.last_name
+    document.getElementById("userName").innerText =
+        user.first_name + " " + user.last_name
 
+    // Get real GPS location
+    navigator.geolocation.getCurrentPosition(position => {
 
-// Get real GPS location
-navigator.geolocation.getCurrentPosition(position => {
+        currentLat = position.coords.latitude
+        currentLon = position.coords.longitude
 
-currentLat = position.coords.latitude
-currentLon = position.coords.longitude
+        fetchNearbyUsers()
 
-fetchNearbyUsers()
-
-}, error => {
-    console.log("Geolocation failed:", error)
-    document.getElementById("locationInput").style.display = "block"
-    document.getElementById("manualCity").value = "Seattle, WA"
+    }, error => {
+        console.log("Geolocation failed:", error)
+        document.getElementById("locationInput").style.display = "block"
+        document.getElementById("manualCity").value = "Seattle, WA"
+    })
 })
-}
 
 const cityCoordinates = {
     "seattle": { lat: 47.6062, lon: -122.3321 },
