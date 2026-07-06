@@ -169,16 +169,20 @@ list.appendChild(div)
 // PROFILE VIEW
 /////////////////////////
 
+let selectedUser = null
+
 function showProfile(user){
+selectedUser = user
 
 document.getElementById("profileName").innerText =
 user.first_name + " " + user.last_name
-
 document.getElementById("profileAge").innerText = user.age
 document.getElementById("profileGender").innerText = user.gender
 document.getElementById("profileCity").innerText = user.city
 document.getElementById("profileInterests").innerText =
 user.interests.join(", ")
+document.getElementById("messageText").value = ""
+document.getElementById("messageStatus").innerText = ""
 
 document.getElementById("profileModal").style.display="block"
 
@@ -187,7 +191,50 @@ document.getElementById("profileModal").style.display="block"
 
 function closeModal(){
 document.getElementById("profileModal").style.display="none"
+selectedUser = null
 }
+
+function sendProfileMessage(){
+const textarea = document.getElementById("messageText")
+const status = document.getElementById("messageStatus")
+
+if (!selectedUser || !textarea || !status) return
+
+const text = textarea.value.trim()
+if (!text) {
+    status.innerText = "Please write a message first."
+    return
+}
+
+const message = {
+    to: selectedUser.first_name + " " + selectedUser.last_name,
+    text: text,
+    sentAt: new Date().toLocaleString()
+}
+
+let sentMessages = []
+try {
+    const stored = JSON.parse(localStorage.getItem("sentMessages") || "[]")
+    sentMessages = Array.isArray(stored) ? stored : []
+} catch (error) {
+    console.error("Could not read sent messages:", error)
+}
+
+sentMessages.push(message)
+localStorage.setItem("sentMessages", JSON.stringify(sentMessages))
+
+status.innerText = "Message Sent!"
+textarea.value = ""
+}
+
+window.sendProfileMessage = sendProfileMessage
+
+window.addEventListener("DOMContentLoaded", function () {
+    const sendButton = document.getElementById("sendMessageButton")
+    if (sendButton) {
+        sendButton.addEventListener("click", sendProfileMessage)
+    }
+})
 
 
 /////////////////////////
