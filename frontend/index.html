@@ -56,25 +56,20 @@
 
     <script>
       window.onload = function () {
-        if (localStorage.getItem("currentUser")) {
+        if (
+          localStorage.getItem("currentUserId") ||
+          localStorage.getItem("currentUser")
+        ) {
           window.location.href = "dashboard.html";
         }
       };
 
-      function getSavedUsers() {
-        return JSON.parse(localStorage.getItem("savedUsers") || "[]");
-      }
-
-      function saveUsers(users) {
-        localStorage.setItem("savedUsers", JSON.stringify(users));
-      }
-
-      function registerUser() {
+      async function registerUser() {
         const user = {
           email: document.getElementById("email").value.trim(),
           first_name: document.getElementById("first_name").value.trim(),
           last_name: document.getElementById("last_name").value.trim(),
-          age: document.getElementById("age").value,
+          age: parseInt(document.getElementById("age").value, 10),
           gender: document.getElementById("gender").value,
           city: document.getElementById("city").value.trim(),
           interests: document.getElementById("interests").value,
@@ -85,35 +80,56 @@
           return;
         }
 
-        const users = getSavedUsers();
-        const existing = users.find((u) => u.email === user.email);
+        try {
+          const response = await fetch("/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+          });
 
-        if (existing) {
-          alert(
-            "An account with that email already exists. Please login instead.",
-          );
-          showLogin();
-          return;
+          const data = await response.json();
+
+          if (!response.ok) {
+            alert(data.detail || data.message || "Signup failed.");
+            return;
+          }
+
+          localStorage.setItem("currentUserId", data.user_id);
+          window.location.href = "dashboard.html";
+        } catch (error) {
+          console.error("Signup error:", error);
+          alert("Unable to create account. Please try again later.");
         }
-
-        users.push(user);
-        saveUsers(users);
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        window.location.href = "dashboard.html";
       }
 
-      function loginUser() {
+      async function loginUser() {
         const email = document.getElementById("loginEmail").value.trim();
-        const users = getSavedUsers();
-        const user = users.find((u) => u.email === email);
 
-        if (!user) {
-          alert("No account found with that email. Please register first.");
+        if (!email) {
+          alert("Please enter your email.");
           return;
         }
 
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        window.location.href = "dashboard.html";
+        try {
+          const response = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            alert(data.detail || data.message || "Login failed.");
+            return;
+          }
+
+          localStorage.setItem("currentUserId", data.user_id);
+          window.location.href = "dashboard.html";
+        } catch (error) {
+          console.error("Login error:", error);
+          alert("Unable to log in. Please try again later.");
+        }
       }
 
       function demoLogin() {

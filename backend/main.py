@@ -1,13 +1,19 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, EmailStr
 import json
 import math
 import os
+import sqlite3
+from pathlib import Path
 
 app = FastAPI()
 
-DATA_FILE = "../data/users.json"
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR.parent / "data"
+DB_FILE = DATA_DIR / "location.db"
+SEED_FILE = DATA_DIR / "users.json"
 
 # Allow frontend access
 app.add_middleware(
@@ -18,73 +24,159 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# -------------------------
-# Load users
-# -------------------------
+
+class UserIn(BaseModel):
+    first_name: str
+    last_name: str
+    email: EmailStr
+    age: int
+    gender: str | None = None
+    city: str | None = None
+    bio: str | None = None
+    interests: list[str] | str = []
+    photo: str | None = None
+    lat: float | None = None
+    lon: float | None = None
+
+
+class LocationIn(BaseModel):
+    lat: float
+    lon: float
+
+
+class EmailIn(BaseModel):
+    email: EmailStr
+
+
+def get_db_connection():
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    conn = get_db_connection()
+    with conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                first_name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                age INTEGER,
+                gender TEXT,
+                city TEXT,
+                bio TEXT,
+                interests TEXT,
+                photo TEXT,
+                lat REAL,
+                lon REAL
+            )
+            """
+        )
+
+        row = conn.execute("SELECT COUNT(*) as count FROM users").fetchone()
+        if row is None or row["count"] == 0:
+            seed_database(conn)
+    conn.close()
+
+
+def seed_database(conn):
+    if not SEED_FILE.exists():
+        return
+
+    with open(SEED_FILE, "r", encoding="utf-8") as file:
+        users = json.load(file)
+
+    for user in users:
+        interests = user.get("interests", [])
+        if isinstance(interests, str):
+            interests = [i.strip() for i in interests.split(",") if i.strip()]
+
+        lat = user.get("lat") if user.get("lat") is not None else user.get("latitude")
+        lon = user.get("lon") if user.get("lon") is not None else user.get("longitude")
+
+        conn.execute(
+            """
+            INSERT OR IGNORE INTO users
+            (first_name, last_name, email, age, gender, city, bio, interests, photo, lat, lon)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                user.get("first_name"),
+                user.get("last_name"),
+                user.get("email") or f"seed{user.get('id')}@example.com",
+                user.get("age"),
+                user.get("gender"),
+                user.get("city"),
+                user.get("bio"),
+                json.dumps(interests),
+                user.get("photo", ""),
+                lat,
+                lon,
+            ),
+        )
+
+
+def row_to_user(row):
+    if row is None:
+        return None
+
+    interests = []
+    if row["interests"]:
+        try:
+            interests = json.loads(row["interests"])
+        except json.JSONDecodeError:
+            interests = [i.strip() for i in str(row["interests"]).split(",") if i.strip()]
+
+    return {
+        "id": row["id"],
+        "first_name": row["first_name"],
+        "last_name": row["last_name"],
+        "email": row["email"],
+        "age": row["age"],
+        "gender": row["gender"],
+        "city": row["city"],
+        "bio": row["bio"] or "",
+        "interests": interests,
+        "photo": row["photo"] or "",
+        "lat": row["lat"],
+        "lon": row["lon"],
+    }
+
+
 def load_users():
-
-    if not os.path.exists(DATA_FILE):
-        return []
-
-    with open(DATA_FILE, "r") as file:
-        return json.load(file)
+    conn = get_db_connection()
+    rows = conn.execute("SELECT * FROM users").fetchall()
+    conn.close()
+    return [row_to_user(row) for row in rows]
 
 
-# -------------------------
-# Save users
-# -------------------------
-def save_users(users):
-
-    with open(DATA_FILE, "w") as file:
-        json.dump(users, file, indent=4)
+def find_user_by_email(email: str):
+    conn = get_db_connection()
+    row = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+    conn.close()
+    return row_to_user(row)
 
 
-# -------------------------
-# Distance calculation
-# -------------------------
-def distance_miles(lat1, lon1, lat2, lon2):
-
-    R = 3958.8
-
-    dlat = math.radians(lat2 - lat1)
-    dlon = math.radians(lon2 - lon1)
-
-    a = (
-        math.sin(dlat/2)**2 +
-        math.cos(math.radians(lat1)) *
-        math.cos(math.radians(lat2)) *
-        math.sin(dlon/2)**2
-    )
-
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-
-    return R * c
+@app.on_event("startup")
+def startup_event():
+    init_db()
 
 
-# -------------------------
-
-
-# -------------------------
-# Get all users
-# -------------------------
 @app.get("/users")
 def get_users():
     return load_users()
 
 
-# -------------------------
-# Get user profile
-# -------------------------
 @app.get("/profile/{user_id}")
 def get_profile(user_id: int):
-
-    users = load_users()
-
-    for user in users:
-        if user["id"] == user_id:
-            return user
-
-    return {"error": "User not found"}
+    user = next((u for u in load_users() if u["id"] == user_id), None)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 
 # -------------------------
@@ -92,37 +184,20 @@ def get_profile(user_id: int):
 # -------------------------
 @app.get("/nearby-users")
 def nearby_users(lat: float, lon: float, interest: str | None = None):
-
     users = load_users()
     nearby = []
 
     for user in users:
+        if user["lat"] is None or user["lon"] is None:
+            continue
 
-        user_lat = user.get("latitude") or user.get("lat")
-        user_lon = user.get("longitude") or user.get("lon")
-
-        dist = distance_miles(lat, lon, user_lat, user_lon)
-
+        dist = distance_miles(lat, lon, user["lat"], user["lon"])
         if dist <= 50:
-
             if interest:
                 if interest.lower() not in [i.lower() for i in user["interests"]]:
                     continue
 
-            nearby.append({
-                "id": user["id"],
-                "first_name": user["first_name"],
-                "last_name": user["last_name"],
-                "age": user["age"],
-                "gender": user["gender"],
-                "bio": user.get("bio", ""),
-                "interests": user["interests"],
-                "city": user.get("city", ""),
-                "lat": user_lat,
-                "lon": user_lon,
-                "photo": user.get("photo", ""),
-                "distance": round(dist, 2)
-            })
+            nearby.append({**user, "distance": round(dist, 2)})
 
     return nearby
 
@@ -132,37 +207,17 @@ def nearby_users(lat: float, lon: float, interest: str | None = None):
 # Used by new JS code
 # -------------------------
 @app.post("/users-nearby")
-def users_nearby(location: dict):
-
-    lat = location.get("lat")
-    lon = location.get("lon")
-
+def users_nearby(location: LocationIn):
     users = load_users()
     nearby = []
 
     for user in users:
+        if user["lat"] is None or user["lon"] is None:
+            continue
 
-        user_lat = user.get("latitude") or user.get("lat")
-        user_lon = user.get("longitude") or user.get("lon")
-
-        dist = distance_miles(lat, lon, user_lat, user_lon)
-
+        dist = distance_miles(location.lat, location.lon, user["lat"], user["lon"])
         if dist <= 50:
-
-            nearby.append({
-                "id": user["id"],
-                "first_name": user["first_name"],
-                "last_name": user["last_name"],
-                "age": user["age"],
-                "gender": user["gender"],
-                "bio": user.get("bio", ""),
-                "interests": user["interests"],
-                "city": user.get("city", ""),
-                "lat": user_lat,
-                "lon": user_lon,
-                "photo": user.get("photo", ""),
-                "distance": round(dist, 2)
-            })
+            nearby.append({**user, "distance": round(dist, 2)})
 
     return nearby
 
@@ -171,20 +226,39 @@ def users_nearby(location: dict):
 # Signup endpoint
 # -------------------------
 @app.post("/signup")
-def signup(user: dict):
+def signup(user: UserIn):
+    interests = user.interests
+    if isinstance(interests, str):
+        interests = [i.strip() for i in interests.split(",") if i.strip()]
 
-    users = load_users()
-
-    if users:
-        new_id = max(u["id"] for u in users) + 1
-    else:
-        new_id = 1
-
-    user["id"] = new_id
-
-    users.append(user)
-
-    save_users(users)
+    conn = get_db_connection()
+    try:
+        with conn:
+            cursor = conn.execute(
+                """
+                INSERT INTO users
+                (first_name, last_name, email, age, gender, city, bio, interests, photo, lat, lon)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    user.first_name,
+                    user.last_name,
+                    user.email,
+                    user.age,
+                    user.gender,
+                    user.city,
+                    user.bio,
+                    json.dumps(interests),
+                    user.photo or "",
+                    user.lat,
+                    user.lon,
+                ),
+            )
+            new_id = cursor.lastrowid
+    except sqlite3.IntegrityError:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    finally:
+        conn.close()
 
     return {"message": "User created", "user_id": new_id}
 
@@ -193,15 +267,11 @@ def signup(user: dict):
 # Simple login
 # -------------------------
 @app.post("/login")
-def login(email: str):
-
-    users = load_users()
-
-    for user in users:
-        if user.get("email") == email:
-            return {"user_id": user["id"]}
-
-    return {"error": "User not found"}
+def login(payload: EmailIn):
+    user = find_user_by_email(payload.email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"user_id": user["id"]}
 
 
 # Serve static frontend files
