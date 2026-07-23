@@ -5,12 +5,33 @@ let map
 let currentLat
 let currentLon
 
-window.addEventListener("load", function(){
+window.addEventListener("load", async function(){
     if (!document.getElementById("userName")) {
         return
     }
 
-    const user = JSON.parse(localStorage.getItem("currentUser"))
+    const userId = localStorage.getItem("currentUserId")
+    let user = null
+
+    if (userId) {
+        try {
+            const response = await fetch(`/profile/${userId}`)
+            if (!response.ok) {
+                throw new Error("Profile fetch failed")
+            }
+            user = await response.json()
+        } catch (error) {
+            console.error("Could not load current user profile:", error)
+        }
+    }
+
+    if (!user) {
+        try {
+            user = JSON.parse(localStorage.getItem("currentUser"))
+        } catch (error) {
+            console.error("Could not read legacy currentUser:", error)
+        }
+    }
 
     if (!user) {
         window.location.href = "index.html"
@@ -49,33 +70,30 @@ const cityCoordinates = {
 function fetchNearbyUsers() {
     // Send location to backend
     fetch("/users-nearby", {
-
-    method: "POST",
-
-    headers: {
-    "Content-Type": "application/json"
-    },
-
-    body: JSON.stringify({
-    lat: currentLat,
-    lon: currentLon
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            lat: currentLat,
+            lon: currentLon
+        })
     })
-
+    .then(async res => {
+        if (!res.ok) {
+            const text = await res.text()
+            throw new Error(`Backend returned ${res.status}: ${text}`)
+        }
+        return res.json()
     })
-
-    .then(res => res.json())
-
     .then(data => {
-
-    users = data
-
-    loadUsers()
-
-    initMap()
-
+        users = data
+        loadUsers()
+        initMap()
     })
     .catch(err => {
         console.error("Error fetching users:", err)
+        alert("Could not load nearby users. Please try again.")
     })
 }
 

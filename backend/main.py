@@ -11,9 +11,11 @@ from pathlib import Path
 app = FastAPI()
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR.parent / "data"
+PROJECT_DIR = BASE_DIR.parent
+DATA_DIR = PROJECT_DIR / "data"
 DB_FILE = DATA_DIR / "location.db"
 SEED_FILE = DATA_DIR / "users.json"
+FRONTEND_DIR = PROJECT_DIR / "frontend"
 
 # Allow frontend access
 app.add_middleware(
@@ -118,6 +120,23 @@ def seed_database(conn):
                 lon,
             ),
         )
+
+
+def distance_miles(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    lat1_rad = math.radians(lat1)
+    lon1_rad = math.radians(lon1)
+    lat2_rad = math.radians(lat2)
+    lon2_rad = math.radians(lon2)
+
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2) ** 2
+    )
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return 3958.8 * c
 
 
 def row_to_user(row):
@@ -275,7 +294,7 @@ def login(payload: EmailIn):
 
 
 # Serve static frontend files
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
+app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn
